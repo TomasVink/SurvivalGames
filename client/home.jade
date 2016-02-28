@@ -1,0 +1,115 @@
+template(name="layout")
+	div.container
+		+yield
+
+template(name="grid")
+	div.row
+		div.col-sm-12.text-center
+			a(href="{{pathFor 'home'}}"): img.img-responsive(src="fiche_v3.0.jpg" alt="The Survival Games" style="display:inline;")
+	div.row
+		div.col-sm-12.spacing
+			div.well.well-sm.text-center
+				h4.black Bemachtig één van de {{deelnemers}} nog beschikbare plaatsen.
+				p.black 1. Wacht tot de timer afloopt.
+				p.black 2. Voer de opdracht uit.
+				p.black 3. Geef de gevonden/gewonnen code in.
+				p.black 4. Is het gelukt? Ga naar stap 6.
+				p.black 5. Keer terug naar stap 1 of geef de correcte code in bij stap 3.
+				p.black 6. Hoera, je bent geselecteerd en kan je registreren.
+				p.black 7. Nu begint het pas echt.
+	each opdrachten
+		div.row
+			div.col-sm-12.opdracht
+				if opdracht
+					div.row
+						div.col-sm-6
+							h4 Opdracht: {{opdracht}}
+							each imgs
+								a.popup(href="{{this}}.jpg" target="_blank"): img.inline-img.img-responsive(src="{{this}}_thumb.jpg")
+							br
+							if code
+								h4 De code is gekraakt, het antwoord was:
+								code {{code}}
+							else if duo
+								small Let op! Dit is een duo inschrijving. Er worden tegelijkertijd twee deelnemers ingeschreven waarvan maximum één al eerder heeft deelgenomen aan The Survival Games. Zorg dus dat je al een partner hebt wanneer je je inschrijft.	
+						each deelnemer _id
+							div.col-sm-3
+								p Deelnemer:
+								h3.less-spacing {{name}}
+								p {{age}} jaar
+								p Survival skills:
+								ul
+									li {{skill1}}
+									li {{skill2}}
+									li {{skill3}}
+				else
+					+timer
+	+insertCode
+
+template(name="timer")
+	h4: span(id="{{_id}}")
+
+template(name="insertCode")
+	div.row
+		div.col-sm-12.spacing
+			div.well.well-sm.text-center
+				input#signUpCode(placeholder="Voer je code in")
+				button#submit Aanmelden
+
+template(name="signUp")
+	div.row
+		div.col-sm-12
+			a(href="{{pathFor 'home'}}") Keer terug
+			h1 Goed gedaan.
+			p Je hebt een code weten te bemachtigen en mag daardoor deelnemen aan The Survival Games. Jouw plek is nu <span id="countdownLock"></span> gereserveerd. Indien je jouw registratie niet weet af te ronden voor die tijd wordt deze plek weer vrijgegeven.
+			if opdracht.duo
+				.alert.alert-danger Let op! Dit is een duo inschrijving. Er worden tegelijkertijd twee deelnemers ingeschreven waarvan maximum één al eerder heeft deelgenomen aan The Survival Games.
+	div.row
+		if opdracht.duo
+			div.col-sm-6
+				+form
+			div.col-sm-6
+				+form
+		else
+			div.col-sm-12
+				+form
+	div.row
+		div.col-sm-12
+			.form-group
+				.checkbox
+					label
+						input#agree(type="checkbox" required)
+						p Bij het indienen van dit formulier verklaar ik deel te nemen aan The Survival Games die plaatsvinden van zaterdag 26 tot maandag 28 maart 2016. Ik bevestig dat ik de deelnameprijs van 65€ per persoon verschuldigd ben aan de organisatoren, zelfs wanneer ik om welke reden dan ook verhinderd ben om deel te nemen. De deelnameprijs zal alleen worden terugbetaald indien er vervaning voor mijn plaats is gevonden in samenspraak met de organisatoren. Indien het voor jou moeilijk is dit bedrag op te brengen, neem dan contact op met de organisatie, dan zorgen we voor een verminderd tarief.
+						p Verder verklaar ik mij bereid verschillende ontberingen te ondergaan zoals honger en koude, maar besef ik ook positieve dingen mee te mogen maken zoals kameraadschap, vertrouwen in mijn teamgenoten en eeuwige dank aan de organisatoren. En dan nog de kleine lettertjes:
+						small Deelname is geheel op eigen risico. De organisatie kan op geen enkel moment aansprakelijk worden gesteld voor ongevallen en verlies van of schade aan eigendommen.
+			.form-group
+				button#signUp Aanmelden
+
+template(name="form")
+	.form-group
+		label Voor en achternaam
+		input.form-control.name(type="text" placeholder="Voor en achternaam" required)
+	.form-group
+		label Leeftijd
+		input.form-control.age(type="number" placeholder="Leeftijd" required)
+	.form-group
+		label Emailadres
+		input.form-control.email(type="email" placeholder="Emailadres" required)
+	.form-group
+		label Telefoonnummer
+		input.form-control.tel(type="number" placeholder="GSM" required)
+	.form-group
+		label Noem jouw 3 beste survival skills
+		br
+		label #1
+		input.form-control.skill1(type="text" required placeholder="Awesome Skilllzzz")
+		label #2
+		input.form-control.skill2(type="text" required placeholder="Awesome Skilllzzz")
+		label #3
+		input.form-control.skill3(type="text" required placeholder="Awesome Skilllzzz")
+	.form-group
+		label Indien je nog opmerkingen hebt (allergieen, angsten, dromen, ...), vermeld ze dan hier:
+		textarea.info.form-control(rows='5' placeholder="Ja, ik wou gewoon nog even zeggen hoe dankbaar ik ben tegenover de organisatoren, dat zij voor ons een weekend vol spanning en avontuur organiseren. Zij bezorgen ons echt een ervaring om nooit te vergeten. Wauw, ik ben er eigenlijk sprakenloos van.")
+
+template(name="loading")
+	p Loading...
